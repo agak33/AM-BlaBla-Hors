@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db.utils import IntegrityError
 
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
@@ -39,6 +40,12 @@ class SessionViewSet(viewsets.ViewSet):
                     status=403, data={"detail": "Such user already exists."}
                 )
         return Response(status=403, data={"detail": "Invalid register data."})
+
+
+    @action(detail=False, methods=["post"])
+    def valid(self, request):
+        """Method to check if session token is valid."""
+        return Response(status=200)
 
     @action(detail=False, methods=["get"])
     def landing_content(self, request):

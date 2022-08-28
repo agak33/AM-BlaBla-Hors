@@ -10,7 +10,7 @@ class UserSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def create(self, validated_data):
-        new_user = User.objects.create(
+        new_user = User.objects.create_user(
             **validated_data, username=validated_data["email"]
         )
         token = Token.objects.create(user=new_user)
