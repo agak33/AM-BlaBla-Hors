@@ -1,0 +1,32 @@
+[
+  {
+    "id": 3,
+    "start": "place A",
+    "destination": "place B",
+    "animals": 3,
+    "people": 2,
+    "pricePerAnimal": 300,
+    "pricePerPerson": 30,
+    "currency": "PLN"
+  },
+  {
+    "id": 11,
+    "start": "place A",
+    "destination": "place C",
+    "animals": 1,
+    "people": 3,
+    "pricePerAnimal": 150,
+    "pricePerPerson": 70,
+    "currency": "PLN"
+  },
+  {
+    "id": 2,
+    "start": "place X",
+    "destination": "place Y",
+    "animals": 2,
+    "people": 1,
+    "pricePerAnimal": 150,
+    "pricePerPerson": 0,
+    "currency": "PLN"
+  }
+]

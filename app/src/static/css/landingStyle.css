@@ -1,0 +1,78 @@
+.about-section {
+  display: flex;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.about-content {
+  margin-right: 50px;
+  width: 60%;
+}
+
+.why-section {
+  display: flex;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.why-content {
+  margin-left: 50px;
+  width: 60%;
+}
+
+#horse-img {
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+  object-fit: contain;
+  height: 100%;
+  max-width: 40%;
+}
+
+.login-section {
+  margin-top: 50px;
+  width: 100%;
+  position: absolute;
+  right: 0px;
+  text-align: center;
+  padding: 20px;
+  background-color: skyblue;
+}
+
+.btn-landing {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 30%;
+  padding: 10px;
+}
+
+h1 {
+  text-align: center;
+  padding: 30px;
+}
+
+@media screen and (max-width: 800px) {
+  h1 {
+    padding-bottom: 0px;
+  }
+
+  .about-section {
+    flex-direction: column;
+  }
+
+  .about-content {
+    width: 90%;
+    text-align: center;
+    margin: 0;
+  }
+
+  .why-content {
+    text-align: center;
+    width: 100%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  #horse-img {
+    height: 0;
+  }
+}
