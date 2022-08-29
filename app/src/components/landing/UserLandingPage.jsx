@@ -2,12 +2,14 @@ import { StatsSection } from './StatsSection';
 import Container from 'react-bootstrap/Container';
 import { useLandingContent } from '../hooks/useLandingContent';
 import { LoadingPage } from '../errors/LoadingPage';
+import Button from 'react-bootstrap/esm/Button';
+import { Link } from 'react-router-dom';
 
 export function UserLandingPage() {
   const {
     isLoading,
     isValid,
-    content: { first_name: firstName, stats },
+    content: { first_name: firstName, organized },
   } = useLandingContent();
 
   if (isLoading) {
@@ -19,8 +21,19 @@ export function UserLandingPage() {
   }
   return (
     <Container>
-      <h2>Witaj, {firstName}!</h2>
-      <StatsSection stats={stats} />
+      <div className="welcome-header">
+        <h1>Witaj, {firstName}!</h1>
+        <h6>Miło Cię znowu widzieć :)</h6>
+        <div className="btn-box">
+          <Link to="/new">
+            <Button variant="outline-dark" className="btn-outline-dark btn-landing">Dodaj trasę</Button>
+          </Link>
+          <Link to="search">
+            <Button variant="outline-dark" className="btn-outline-dark btn-landing">Szukaj trasy</Button>
+          </Link>
+        </div>
+      </div>
+      {!isLoading && <StatsSection stats={{organized}} />}
     </Container>
   );
 }

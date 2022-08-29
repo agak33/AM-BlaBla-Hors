@@ -11,8 +11,6 @@ export function useSessionToken() {
         JSON.parse(
           window.localStorage.getItem(process.env.REACT_APP_TOKEN_NAME)
         ) ?? '';
-
-      console.log(currToken);
       if (currToken) {
         const response = await isSessionValid(currToken);
         if (response) {

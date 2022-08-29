@@ -67,7 +67,7 @@ export function AuthorizationPage({ isLoginPage }) {
       currErrors.password = pageErrors.passwordInvalid;
     } else if (password.length > 150) {
       currErrors.password = pageErrors.passwordTooLong;
-    } else if (password.length < 8) {
+    } else if (password.length < 8 && !isLoginPage) {
       currErrors.password = pageErrors.passwordTooShort;
     }
 
@@ -76,12 +76,14 @@ export function AuthorizationPage({ isLoginPage }) {
   }
 
   function handleSubmitButton(event) {
+    setErrors({})
     event.preventDefault();
     const formData = extractData(event.target.form || {}, pageFields);
 
     if (isFormValid(formData)) {
       fetchSessionToken(formData, isLoginPage).then((response) => {
-        const { statusCode, token, errorMessage } = response;
+        const { statusCode, token } = response;
+        let errorMessage = undefined;
 
         if (statusCode === 201) {
           window.localStorage.setItem(
@@ -89,12 +91,18 @@ export function AuthorizationPage({ isLoginPage }) {
             JSON.stringify(token)
           );
           window.location = '/';
+        } else if(statusCode === 401) {
+          errorMessage = pageErrors.code401Login
+
+        } else if(statusCode === 403) {
+          errorMessage = pageErrors.code403Register;
         } else {
-          setErrors({
-            ...errors,
-            errorMessage,
-          });
+          errorMessage = isLoginPage ? pageErrors.otherErrorsLogin : pageErrors.otherErrorsRegister
         }
+
+        setErrors({
+          errorMessage
+        })
       });
     } else {
     }
@@ -112,7 +120,6 @@ export function AuthorizationPage({ isLoginPage }) {
             )}
             {isLoginPage ? (
               <LoginForm
-                handleSubmitButton={handleSubmitButton}
                 fields={pageFields}
                 errors={errors}
                 emailLabel={loginData.emailLabel}
@@ -120,7 +127,6 @@ export function AuthorizationPage({ isLoginPage }) {
               />
             ) : (
               <RegisterForm
-                handleSubmitButton={handleSubmitButton}
                 fields={pageFields}
                 errors={errors}
                 firstNameLabel={registerData.firstNameLabel}

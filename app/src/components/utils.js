@@ -19,8 +19,9 @@ export async function fetchSessionToken(formData, isRegistered) {
       })
       .catch((err) => {
         statusCode = err.response.status;
-        errorMessage = err.response.data.details;
+        errorMessage = err.response.data.detail;
       });
+
   } else {
     await axios
       .post(
@@ -44,6 +45,28 @@ export async function fetchSessionToken(formData, isRegistered) {
   }
 
   return { statusCode, token, errorMessage };
+}
+
+export async function fetchRoutes() {
+  let statusCode = 400, routes = []
+  await axios.get(
+    `${process.env.REACT_APP_API_URL}/route/filtered_offers/`,{
+      headers: {
+        Authorization: `Token ${JSON.parse(
+          window.localStorage.getItem(
+            process.env.REACT_APP_TOKEN_NAME
+          )
+        )}`,
+      },
+    }
+  ).then(response => {
+    statusCode = response.status;
+    routes = response.data
+  }).catch(err => {
+    statusCode = err.response.status;
+  })
+
+  return { statusCode, routes }
 }
 
 export async function destroySessionToken(token) {
@@ -87,7 +110,6 @@ export async function isSessionValid(token) {
       isValid = response.status === 200;
     })
     .catch((err) => {
-      console.log(err.response.data);
       return false;
     });
   return isValid;

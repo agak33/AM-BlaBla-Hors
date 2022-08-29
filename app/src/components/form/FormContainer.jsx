@@ -3,11 +3,11 @@ import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/esm/Container';
 import { useState } from 'react';
-import { extractData } from '../utils';
+import { Navigate } from 'react-router-dom';
+import { extractData, fetchRoutes } from '../utils';
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import { useCurrencies } from '../hooks/useCurrencies';
 import '../../static/css/formRouteStyle.css';
-import { LocationList } from './LocationList';
 
 export function FormContainer({ isSearchForm }) {
   const { isLoading, currencies } = useCurrencies();
@@ -25,21 +25,29 @@ export function FormContainer({ isSearchForm }) {
     peoplePrice: 'peoplePrice',
   };
 
-  function validate(formData) {
+  function isFormValid(formData) {
     let currErrors = {};
 
     setErrors(currErrors);
+    return Object.keys(currErrors).length === 0;
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     const formData = extractData(event.target.form || {}, fieldIds);
 
-    validate(formData);
+    if(isFormValid(formData)) {
+      if(isSearchForm) {
+        fetchRoutes(formData).then(response => {
+          const { statusCode, routes } = response;
 
-    if (isSearchForm) {
-      window.location = '/routes';
-    } else {
+          if(statusCode === 200) {
+            <Navigate to={{
+              pathname: '/routes'
+            }} />
+          }
+        })
+      }
     }
   }
 
@@ -57,8 +65,8 @@ export function FormContainer({ isSearchForm }) {
             {errors.start}
           </Form.Control.Feedback>
         </FloatingLabel>
-
-        {!isSearchForm && <LocationList />}
+{/*
+        {!isSearchForm && <LocationList />} */}
 
         <FloatingLabel label="Destination Location">
           <Form.Control

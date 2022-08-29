@@ -1,15 +1,20 @@
-from email.policy import default
-from django.db.utils import IntegrityError
+from telnetlib import STATUS
 
-from rest_framework.authentication import TokenAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
+from django.db.utils import IntegrityError
 from rest_framework import viewsets
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .models import Route
-from .serializers import RouteListItemSerializer, RouteSerializer, SearchRouteSerializer, UserSerializer
+from .serializers import (
+    RouteListItemSerializer,
+    RouteSerializer,
+    SearchRouteSerializer,
+    UserSerializer,
+)
 
 
 # Create your views here.
@@ -41,7 +46,6 @@ class SessionViewSet(viewsets.ViewSet):
                 )
         return Response(status=403, data={"detail": "Invalid register data."})
 
-
     @action(detail=False, methods=["post"])
     def valid(self, request):
         """Method to check if session token is valid."""
@@ -50,7 +54,11 @@ class SessionViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def landing_content(self, request):
         """Method to get landing page content."""
-        return Response(f"{request.user}")
+        organized = Route.objects.count()
+        return Response(status=200, data={
+            "first_name": request.user.first_name,
+            "organized": organized
+        })
 
     @action(detail=False, methods=["get", "patch"])
     def user_settings(self, request):
@@ -77,12 +85,15 @@ class RouteViewSet(viewsets.ModelViewSet):
 
     def update(self, request):
         return Response("")
-    
+
     def destroy(self, request):
         return Response("")
-    
+
     @action(detail=False, methods=['get'])
     def filtered_offers(self, request):
+        routes = Route.objects.all()
+        serialized_routes = RouteListItemSerializer(routes, many=True)
+        return Response(data=serialized_routes.data)
         route_filters = SearchRouteSerializer(data=request.data)
         if route_filters.is_valid():
             routes = Route.objects.all()

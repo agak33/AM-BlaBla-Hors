@@ -50,6 +50,25 @@ h1 {
   padding: 30px;
 }
 
+.welcome-header {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  right: 0px;
+  text-align: center;
+  padding-bottom: 20px;
+  background-image: linear-gradient(to bottom right, skyblue, lavender);
+}
+
+.stats-container {
+  padding-top: 250px;
+  position: relative;
+}
+
+.btn-box {
+  padding-top: 10px;
+}
+
 @media screen and (max-width: 800px) {
   h1 {
     padding-bottom: 0px;
@@ -74,5 +93,19 @@ h1 {
 
   #horse-img {
     height: 0;
+  }
+
+  .stats-container {
+    padding-top: 200px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .btn-box {
+    display: none;
+  }
+
+  .stats-container {
+    padding-top: 140px;
   }
 }
