@@ -23,17 +23,27 @@ export function UserLandingPage() {
     <Container>
       <div className="welcome-header">
         <h1>Witaj, {firstName}!</h1>
-        <h6>Miło Cię znowu widzieć :)</h6>
+        <h6>Dokąd dzisiaj jedziesz? :)</h6>
         <div className="btn-box">
           <Link to="/new">
-            <Button variant="outline-dark" className="btn-outline-dark btn-landing">Dodaj trasę</Button>
+            <Button
+              variant="outline-dark"
+              className="btn-outline-dark btn-landing"
+            >
+              Dodaj trasę
+            </Button>
           </Link>
           <Link to="search">
-            <Button variant="outline-dark" className="btn-outline-dark btn-landing">Szukaj trasy</Button>
+            <Button
+              variant="outline-dark"
+              className="btn-outline-dark btn-landing"
+            >
+              Szukaj trasy
+            </Button>
           </Link>
         </div>
       </div>
-      {!isLoading && <StatsSection stats={{organized}} />}
+      {!isLoading && <StatsSection stats={{ organized }} />}
     </Container>
   );
 }

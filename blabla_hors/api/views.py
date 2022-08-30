@@ -1,5 +1,3 @@
-from telnetlib import STATUS
-
 from django.db.utils import IntegrityError
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
@@ -75,6 +73,8 @@ class SessionViewSet(viewsets.ViewSet):
 class RouteViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    queryset = Route.objects.all()
+    serializer_class = RouteListItemSerializer
 
     def create(self, request):
         route = RouteSerializer(data=request.data)
@@ -88,6 +88,11 @@ class RouteViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request):
         return Response("")
+
+    def list(self, request):
+        routes = Route.objects.filter(organizer=request.user)
+        serialized_routes = RouteListItemSerializer(routes, many=True)
+        return Response(data=serialized_routes.data)
 
     @action(detail=False, methods=['get'])
     def filtered_offers(self, request):

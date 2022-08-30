@@ -1,0 +1,9 @@
+.empty-page-container {
+  background-image: linear-gradient(to bottom right, skyblue, lavender);
+  position: absolute;
+  right: 0;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -28,6 +28,9 @@ export function Header({ isValid }) {
           <Link to="/search" className="nav-link">
             {data.searchRoutesLink}
           </Link>
+          <Link to="/myroutes" className="nav-link">
+            {data.yourListLink}
+          </Link>
         </>
       );
     }
@@ -64,7 +67,7 @@ export function Header({ isValid }) {
     <Navbar bg="dark" variant="dark">
       <Container>
         <Link to="/" className="navbar-brand">
-          BlaBla Hors
+          * Logo *
         </Link>
         {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
         <Navbar.Collapse id="basic-navbar-nav">

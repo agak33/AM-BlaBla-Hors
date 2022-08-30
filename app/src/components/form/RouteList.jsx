@@ -1,23 +1,21 @@
-import { useEffect, useState } from 'react';
 import { RouteElement } from './RouteElement';
 import Container from 'react-bootstrap/esm/Container';
 import { EmptyPage } from '../errors/EmptyPage';
-import { useUserSettings } from '../hooks/useUserSettings';
+import { LoadingPage } from '../errors/LoadingPage';
+import { useRoutes } from '../hooks/useRoutes';
 
-export function RouteList() {
-  const [allRoutes, setAllRoutes] = useState([]);
+export function RouteList({ isUserList }) {
+  const { isLoading, routes } = useRoutes({}, isUserList);
 
-  useEffect(() => {
-    const data = require('../../mockData/routesList.json');
-    setAllRoutes(data);
-  }, []);
-
+  if (isLoading) {
+    return <LoadingPage />;
+  }
   return (
     <Container className="d-flex flex-wrap">
-      {allRoutes.length === 0 ? (
-        <EmptyPage />
+      {routes.length === 0 ? (
+        <EmptyPage isUserList={isUserList} />
       ) : (
-        allRoutes.map((el) => (
+        routes.map((el) => (
           <RouteElement
             key={el.id}
             start={el.start}

@@ -3,14 +3,14 @@ import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/esm/Container';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { extractData, fetchRoutes } from '../utils';
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
-import { useCurrencies } from '../hooks/useCurrencies';
+// import { useCurrencies } from '../hooks/useCurrencies';
 import '../../static/css/formRouteStyle.css';
+import { useRef } from 'react';
+import { postNewRoute } from '../utils';
 
 export function FormContainer({ isSearchForm }) {
-  const { isLoading, currencies } = useCurrencies();
+  // const { isLoading, currencies } = useCurrencies();
   const [errors, setErrors] = useState({});
   const fieldIds = {
     start: 'start',
@@ -24,29 +24,95 @@ export function FormContainer({ isSearchForm }) {
     peopleNum: 'peopleNum',
     peoplePrice: 'peoplePrice',
   };
+  const startRef = useRef();
+  const [startVal, setStartVal] = useState('');
 
-  function isFormValid(formData) {
+  const destinationRef = useRef();
+  const [destinationVal, setDestinationVal] = useState('');
+
+  const dateRef = useRef();
+  const [dateVal, setDateVal] = useState(() => {
+    const today = new Date(Date.now());
+    const year = ('0000' + today.getFullYear()).slice(-4);
+    const month = ('00' + today.getMonth()).slice(-2);
+    const day = ('00' + today.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  });
+
+  const animalsNumRef = useRef();
+  const [animalsNumVal, setAnimalsuNum] = useState(1);
+
+  const animalsPriceRef = useRef();
+  const [animalsPriceVal, setAnimalsPriceVal] = useState(0);
+
+  const peopleNumRef = useRef();
+  const [peopleNumVal, setPeopleNumVal] = useState(0);
+
+  const peoplePriceRef = useRef();
+  const [peoplePriceVal, setPeoplePriceVal] = useState(0);
+
+  function handleChange(event) {
+    const elementId = event.target.id;
+    if (elementId === fieldIds.start && startRef.current.value.length < 100) {
+      setStartVal(startRef.current.value.toUpperCase());
+    } else if (
+      elementId === fieldIds.destination &&
+      (destinationVal.length < 100 ||
+        destinationRef.current.value.length < destinationVal.length)
+    ) {
+      setDestinationVal(destinationRef.current.value.toUpperCase());
+    } else if (elementId === fieldIds.date) {
+      setDateVal(dateRef.current.value);
+    } else if (
+      elementId === fieldIds.animalsNum &&
+      animalsNumRef.current.value > 0 &&
+      animalsNumRef.current.value <= 50
+    ) {
+      setAnimalsuNum(Number.parseInt(animalsNumRef.current.value));
+    } else if (
+      elementId === fieldIds.animalsPrice &&
+      animalsPriceRef.current.value >= 0
+    ) {
+      setAnimalsPriceVal(Math.round(animalsPriceRef.current.value * 100) / 100);
+    } else if (
+      elementId === fieldIds.peopleNum &&
+      peopleNumRef.current.value >= 0 &&
+      peopleNumRef.current.value <= 50
+    ) {
+      setPeopleNumVal(Number.parseInt(peopleNumRef.current.value));
+    } else if (
+      elementId === fieldIds.peoplePrice &&
+      peoplePriceRef.current.value >= 0
+    ) {
+      setPeoplePriceVal(Math.round(peoplePriceRef.current.value * 100) / 100);
+    }
+  }
+
+  function isFormValid() {
     let currErrors = {};
-
     setErrors(currErrors);
     return Object.keys(currErrors).length === 0;
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    const formData = extractData(event.target.form || {}, fieldIds);
-
-    if(isFormValid(formData)) {
-      if(isSearchForm) {
-        fetchRoutes(formData).then(response => {
-          const { statusCode, routes } = response;
-
-          if(statusCode === 200) {
-            <Navigate to={{
-              pathname: '/routes'
-            }} />
+    if (isFormValid()) {
+      if (isSearchForm) {
+        window.location = '/routes';
+      } else {
+        const dataToSend = {
+          date: dateVal,
+          locations: [startVal, destinationVal],
+          animals_num: animalsNumVal,
+          people_num: peopleNumVal,
+          animals_price: animalsPriceVal,
+          person_price: peoplePriceVal,
+        };
+        postNewRoute(dataToSend).then((response) => {
+          if (response === 201) {
+            window.location = '/myroutes';
           }
-        })
+        });
       }
     }
   }
@@ -60,12 +126,15 @@ export function FormContainer({ isSearchForm }) {
             type="text"
             id={`${fieldIds.start}`}
             isInvalid={errors.start}
+            ref={startRef}
+            value={startVal}
+            onChange={handleChange}
           />
           <Form.Control.Feedback type="invalid">
             {errors.start}
           </Form.Control.Feedback>
         </FloatingLabel>
-{/*
+        {/*
         {!isSearchForm && <LocationList />} */}
 
         <FloatingLabel label="Destination Location">
@@ -73,6 +142,9 @@ export function FormContainer({ isSearchForm }) {
             type="text"
             id={`${fieldIds.destination}`}
             isInvalid={errors.destination}
+            ref={destinationRef}
+            value={destinationVal}
+            onChange={handleChange}
           />
           <Form.Control.Feedback type="invalid">
             {errors.destination}
@@ -108,6 +180,9 @@ export function FormContainer({ isSearchForm }) {
               type="date"
               id={`${fieldIds.date}`}
               isInvalid={errors.date}
+              ref={dateRef}
+              value={dateVal}
+              onChange={handleChange}
             />
             <Form.Control.Feedback type="invalid">
               {errors.date}
@@ -115,7 +190,7 @@ export function FormContainer({ isSearchForm }) {
           </FloatingLabel>
         )}
 
-        <FloatingLabel label="Currency">
+        {/* <FloatingLabel label="Currency">
           {isLoading ? (
             <Form.Select>
               <option>Loading...</option>
@@ -127,13 +202,16 @@ export function FormContainer({ isSearchForm }) {
               })}
             </Form.Select>
           )}
-        </FloatingLabel>
+        </FloatingLabel> */}
 
         <FloatingLabel label="Animals Num">
           <Form.Control
             type="number"
             id={`${fieldIds.animalsNum}`}
             isInvalid={errors.animalsNum}
+            ref={animalsNumRef}
+            value={animalsNumVal}
+            onChange={handleChange}
           />
           <Form.Control.Feedback type="invalid">
             {errors.animalsNum}
@@ -145,6 +223,9 @@ export function FormContainer({ isSearchForm }) {
             type="number"
             id={`${fieldIds.animalsPrice}`}
             isInvalid={errors.animalsPrice}
+            ref={animalsPriceRef}
+            value={animalsPriceVal}
+            onChange={handleChange}
           />
           <Form.Control.Feedback type="invalid">
             {errors.animalsPrice}
@@ -156,6 +237,9 @@ export function FormContainer({ isSearchForm }) {
             type="number"
             id={`${fieldIds.peopleNum}`}
             isInvalid={errors.peopleNum}
+            ref={peopleNumRef}
+            value={peopleNumVal}
+            onChange={handleChange}
           />
           <Form.Control.Feedback type="invalid">
             {errors.peopleNum}
@@ -167,6 +251,9 @@ export function FormContainer({ isSearchForm }) {
             type="number"
             id={`${fieldIds.peoplePrice}`}
             isInvalid={errors.peoplePrice}
+            ref={peoplePriceRef}
+            value={peoplePriceVal}
+            onChange={handleChange}
           />
           <Form.Control.Feedback type="invalid">
             {errors.peoplePrice}
