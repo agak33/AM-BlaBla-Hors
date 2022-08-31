@@ -1,0 +1,19 @@
+.routes-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+}
+
+.route-card {
+  margin-top: 20px;
+}
+
+.card-link:link {
+  text-decoration: none;
+  color: black;
+}
+
+.card-link:visited {
+  text-decoration: none;
+  color: black;
+}

@@ -1,5 +1,6 @@
-from rest_framework import serializers
+from urllib import request
 from django.contrib.auth.models import User
+from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 
@@ -19,7 +20,8 @@ class UserSerializer(serializers.Serializer):
 
 class RouteSerializer(serializers.Serializer):
     date = serializers.DateField()
-    locations = serializers.ListField(min_length=2)
+    start = serializers.CharField()
+    destination = serializers.CharField()
     animals_num = serializers.IntegerField()
     people_num = serializers.IntegerField()
     animals_price = serializers.FloatField()
@@ -28,7 +30,12 @@ class RouteSerializer(serializers.Serializer):
 
 class RouteListItemSerializer(RouteSerializer):
     uuid = serializers.UUIDField()
-    locations = serializers.CharField()
+    start = serializers.CharField()
+    destination = serializers.CharField()
+    free_animals_num = serializers.IntegerField()
+    free_people_num = serializers.IntegerField()
+    pending_requests = serializers.IntegerField()
+    approved_requests = serializers.IntegerField()
 
 
 class SearchRouteSerializer(serializers.Serializer):
@@ -40,3 +47,30 @@ class SearchRouteSerializer(serializers.Serializer):
     people_num = serializers.IntegerField()
     animals_max_price = serializers.FloatField()
     person__max_price = serializers.FloatField()
+
+
+class RoutePassengerSerializer(serializers.Serializer):
+    name = serializers.CharField(source='__str__')
+    requests = serializers.ListField()
+
+
+class PassengerSerializer(serializers.Serializer):
+    route = serializers.CharField()
+    animals_num = serializers.IntegerField()
+    people_num = serializers.IntegerField()
+
+
+class PassengerUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
+class PassengerStatusSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    date = serializers.DateField()
+    route = serializers.CharField()
+    animals_num = serializers.IntegerField()
+    people_num = serializers.IntegerField()
+    status = serializers.CharField()
+    cost = serializers.FloatField()
+    contact = serializers.EmailField()
+    passenger_contact = serializers.EmailField()

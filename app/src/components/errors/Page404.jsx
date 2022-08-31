@@ -1,3 +1,12 @@
+import Container from 'react-bootstrap/esm/Container';
+import '../../static/css/page404Style.css';
+
 export function Page404() {
-  return <p>Error 404: Page Not Found</p>;
+  return (
+    <Container>
+      <div className="not-found-container">
+        <h1>Nie znaleziono takiej strony :(</h1>
+      </div>
+    </Container>
+  );
 }

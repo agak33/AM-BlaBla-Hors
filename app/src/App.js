@@ -10,6 +10,10 @@ import { useSessionToken } from './components/hooks/useSessionToken';
 import { LoadingPage } from './components/errors/LoadingPage';
 import { ProtectedRoutesNavigation } from './components/authorization/ProtectedRoutesNavigation';
 import './static/css/commonStyle.css';
+import { useState } from 'react';
+import { RouteElement } from './components/form/RouteElement';
+import { RouteDetails } from './components/form/RouteDetails';
+import { StatusListPage } from './components/form/StatusListPage';
 
 function App() {
   const { isLoading, isValid } = useSessionToken();
@@ -50,8 +54,10 @@ function App() {
             path="/search"
             element={<FormContainer isSearchForm={true} />}
           />
-          <Route path="/routes" element={<RouteList />} />
-          <Route path="/account" element={<SettingsPage />} />
+          <Route path="/routes" element={<RouteList isUserList={false} />} />
+          <Route path="/status" element={<StatusListPage />} />
+          <Route path="/myroutes" element={<RouteList isUserList={true} />} />
+          <Route path="/myroutes/:slug" element={<RouteDetails />} />
         </Route>
 
         <Route path="*" element={<Page404 />} />

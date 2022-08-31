@@ -1,0 +1,26 @@
+.empty-header {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  right: 0px;
+  text-align: center;
+  padding: 20px;
+  background-image: linear-gradient(to bottom right, skyblue, lavender);
+}
+
+.btn-box {
+  padding-top: 10px;
+}
+
+.btn-empty {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 30%;
+  padding: 10px;
+}
+
+@media screen and (max-width: 400px) {
+  .btn-box {
+    display: none;
+  }
+}

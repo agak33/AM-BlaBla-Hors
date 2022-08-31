@@ -1,3 +1,13 @@
-.btn-auth {
+.btn {
   padding: 10px;
+}
+
+@media screen and (max-width: 991px) {
+  #basic-navbar-nav {
+    margin: 10px 0;
+  }
+  .nav-link {
+    padding: 20px 0;
+    text-align: center;
+  }
 }

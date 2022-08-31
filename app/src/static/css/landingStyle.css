@@ -47,14 +47,30 @@
 
 h1 {
   text-align: center;
-  padding: 30px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+
+.welcome-header {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  right: 0px;
+  text-align: center;
+  padding-bottom: 20px;
+  background-image: linear-gradient(to bottom right, skyblue, lavender);
+}
+
+.stats-container {
+  padding-top: 200px;
+  position: relative;
+}
+
+.btn-box {
+  padding-top: 10px;
 }
 
 @media screen and (max-width: 800px) {
-  h1 {
-    padding-bottom: 0px;
-  }
-
   .about-section {
     flex-direction: column;
   }
@@ -74,5 +90,19 @@ h1 {
 
   #horse-img {
     height: 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .btn-box {
+    display: none;
+  }
+
+  .stats-container {
+    padding-top: 140px;
+  }
+
+  h1 {
+    padding: 20px 10px 0px 10px;
   }
 }

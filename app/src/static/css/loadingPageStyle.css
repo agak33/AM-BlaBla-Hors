@@ -1,0 +1,13 @@
+.loading-page-container {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  font-size: xx-large;
+  overflow: hidden;
+}
+
+.loading-page-container > * {
+  margin: 5px;
+}

@@ -20,6 +20,8 @@ export const headerData = {
   registerLink: 'Zarejestruj',
   newRouteLink: 'Dodaj trasę',
   searchRoutesLink: 'Szukaj tras',
+  yourListLink: 'Moje trasy',
+  statusListLink: 'Lista oczekujących',
 };
 
 export const loginPageData = {
@@ -49,4 +51,8 @@ export const authPageErrors = {
   passwordInvalid: 'Wprowadź hasło',
   passwordTooShort: 'Hasło musi mieć minimum 8 znaków.',
   passwordTooLong: 'Hasło może mieć maksymalnie 150 znaków.',
+  code401Login: 'Złe dane logowania',
+  code403Register: 'Taki użytkownik już istnieje',
+  otherErrorsRegister: 'Rejestracja nie powiodła się',
+  otherErrorsLogin: 'Nie udało sie zalogować',
 };

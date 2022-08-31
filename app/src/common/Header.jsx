@@ -6,8 +6,11 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { destroySessionToken } from '../components/utils';
 import { headerData as data } from '../pageContent/pl';
+import { useState } from 'react';
 
 export function Header({ isValid }) {
+  const [open, setOpen] = useState(false);
+
   function logOut() {
     destroySessionToken(
       JSON.parse(window.localStorage.getItem(process.env.REACT_APP_TOKEN_NAME))
@@ -28,6 +31,12 @@ export function Header({ isValid }) {
           <Link to="/search" className="nav-link">
             {data.searchRoutesLink}
           </Link>
+          <Link to="/myroutes" className="nav-link">
+            {data.yourListLink}
+          </Link>
+          <Link to="/status" className="nav-link">
+            {data.statusListLink}
+          </Link>
         </>
       );
     }
@@ -38,10 +47,6 @@ export function Header({ isValid }) {
     if (isValid) {
       return (
         <>
-          <Link to="/account" className="nav-link">
-            {data.accountLink}
-          </Link>
-          {'|'}
           <Button variant="outline-secondary" onClick={logOut}>
             {data.logoutLink}
           </Button>
@@ -60,14 +65,21 @@ export function Header({ isValid }) {
     );
   }
   return (
-    // <Navbar bg="dark" expand="lg" variant="dark">
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="dark" expand="lg" variant="dark">
+      {/* <Navbar bg="dark" variant="dark"> */}
       <Container>
-        <Link to="/" className="navbar-brand">
+        <Link to="/" className="navbar-brand" onClick={() => setOpen(false)}>
           BlaBla Hors
         </Link>
-        {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Toggle
+          aria-controls="basic-navbar-nav"
+          onClick={() => setOpen(!open)}
+        />
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          in={open}
+          onClick={() => setOpen(false)}
+        >
           <Nav className="me-auto">{setAuthorizedOptions()}</Nav>
           <Nav>{setLoginOptions()}</Nav>
         </Navbar.Collapse>
