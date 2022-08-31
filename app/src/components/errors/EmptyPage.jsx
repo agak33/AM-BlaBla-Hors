@@ -1,21 +1,41 @@
 import Button from 'react-bootstrap/esm/Button';
 import Container from 'react-bootstrap/esm/Container';
+import { Link } from 'react-router-dom';
 import '../../static/css/emptyPageStyle.css';
 
 export function EmptyPage({ isUserList }) {
   function setContainerContent() {
-    if (isUserList) {
-      return (
-        <Container className="container d-flex-column align-items-center">
-          <h6>Nie masz jeszcze żadnych tras.</h6>
-          <div className="btn-box">
-            <Button variant="outline-dark">Dodaj</Button>
-            <Button variant="outline-dark">Szukaj</Button>
-          </div>
-        </Container>
-      );
-    }
-    return <h6>Nie znaleziono wyników :(</h6>;
+    return (
+      <Container>
+        <div className="empty-header">
+          <h1>
+            {isUserList
+              ? 'Nie masz jeszcze żadnych tras.'
+              : 'Nie znaleziono wyników :('}
+          </h1>
+          {isUserList && (
+            <div className="btn-box">
+              <Link to="/new">
+                <Button
+                  variant="outline-dark"
+                  className="btn-outline-dark btn-empty"
+                >
+                  Dodaj
+                </Button>
+              </Link>
+              <Link to="/search">
+                <Button
+                  variant="outline-dark"
+                  className="btn-outline-dark btn-empty"
+                >
+                  Szukaj
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </Container>
+    );
   }
   return (
     <Container className="container empty-page-container">

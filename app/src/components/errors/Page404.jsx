@@ -3,8 +3,10 @@ import '../../static/css/page404Style.css';
 
 export function Page404() {
   return (
-    <Container className="container not-found-container">
-      <h6>Nie znaleziono takiej strony :(</h6>
+    <Container>
+      <div className="not-found-container">
+        <h1>Nie znaleziono takiej strony :(</h1>
+      </div>
     </Container>
   );
 }

@@ -47,7 +47,8 @@
 
 h1 {
   text-align: center;
-  padding: 30px;
+  padding-top: 30px;
+  padding-bottom: 20px;
 }
 
 .welcome-header {
@@ -61,7 +62,7 @@ h1 {
 }
 
 .stats-container {
-  padding-top: 250px;
+  padding-top: 200px;
   position: relative;
 }
 
@@ -70,10 +71,6 @@ h1 {
 }
 
 @media screen and (max-width: 800px) {
-  h1 {
-    padding-bottom: 0px;
-  }
-
   .about-section {
     flex-direction: column;
   }
@@ -94,10 +91,6 @@ h1 {
   #horse-img {
     height: 0;
   }
-
-  .stats-container {
-    padding-top: 200px;
-  }
 }
 
 @media screen and (max-width: 400px) {
@@ -107,5 +100,9 @@ h1 {
 
   .stats-container {
     padding-top: 140px;
+  }
+
+  h1 {
+    padding: 20px 10px 0px 10px;
   }
 }

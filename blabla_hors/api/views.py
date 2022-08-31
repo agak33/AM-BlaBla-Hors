@@ -6,12 +6,16 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Route
+from .models import Passenger, Route
 from .serializers import (
     RouteListItemSerializer,
     RouteSerializer,
     SearchRouteSerializer,
     UserSerializer,
+    PassengerSerializer,
+    PassengerUpdateSerializer,
+    PassengerStatusSerializer,
+    RoutePassengerSerializer,
 )
 
 
@@ -61,7 +65,7 @@ class SessionViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get", "patch"])
     def user_settings(self, request):
         """Method to fetching & update user settings."""
-        return Response("")
+        return Response({})
 
     @action(detail=False, methods=['delete'])
     def logout(self, request):
@@ -83,25 +87,65 @@ class RouteViewSet(viewsets.ModelViewSet):
             return Response(status=201)
         return Response(status=400, data={"details": "Invalid data."})
 
-    def update(self, request):
-        return Response("")
-
-    def destroy(self, request):
-        return Response("")
+    def retrieve(self, request, pk):
+        route = self.get_object()
+        return Response(status=200, data=RoutePassengerSerializer(route).data)
 
     def list(self, request):
-        routes = Route.objects.filter(organizer=request.user)
+        routes = Route.objects.filter(organizer=request.user).order_by('date')
         serialized_routes = RouteListItemSerializer(routes, many=True)
         return Response(data=serialized_routes.data)
 
     @action(detail=False, methods=['get'])
     def filtered_offers(self, request):
-        routes = Route.objects.all()
-        serialized_routes = RouteListItemSerializer(routes, many=True)
-        return Response(data=serialized_routes.data)
-        route_filters = SearchRouteSerializer(data=request.data)
-        if route_filters.is_valid():
-            routes = Route.objects.all()
-            serialized_routes = RouteListItemSerializer(routes, many=True)
+        params = request.query_params
+        
+        try:
+            routes = Route.objects.exclude(organizer=request.user).filter(
+                date__gte=params['minDate'],
+                date__lte=params['maxDate'],
+                start=params['start'],
+                destination=params['destination'],
+                animals_price__lte=params['animalsPrice'],
+                person_price__lte=params['peoplePrice'],
+            ).order_by('date')
+            routes_filtered = (
+                route for route in routes if route.free_animals_num >= int(params['animalsNum']) and route.free_people_num >= int(params['peopleNum'])
+            )
+            serialized_routes = RouteListItemSerializer(routes_filtered, many=True)
             return Response(data=serialized_routes.data)
+        except Exception:
+            pass
+
         return Response(status=400, data={"details": "Invalid data."})
+
+    @action(detail=False, methods=['patch', 'post', 'get'])
+    def passenger(self, request):
+        if request.method == 'POST':
+            passenger = PassengerSerializer(data=request.data)
+            if passenger.is_valid():
+                Passenger.objects.create(
+                    route=Route.objects.get(uuid=passenger.validated_data['route']),
+                    animals_num=passenger.validated_data['animals_num'],
+                    people_num=passenger.validated_data['people_num'],
+                    passenger=request.user
+                )
+                return Response(status=201)
+            return Response(status=400, data={"detail": "Invalid data."})
+        
+        if request.method == 'GET':
+            passenger_list = Passenger.objects.filter(
+                passenger=request.user
+            )
+            serialized_list = PassengerStatusSerializer(passenger_list, many=True)
+            return Response(data=serialized_list.data)
+        
+        passenger = PassengerUpdateSerializer(data=request.data)
+        if passenger.is_valid():
+            passenger_obj = Passenger.objects.get(
+                **passenger.validated_data
+            )
+            passenger_obj.status = 'APPROVED'
+            passenger_obj.save()
+            return Response(status=200)
+        return Response(status=400, data={"detail": "Invalid data"})

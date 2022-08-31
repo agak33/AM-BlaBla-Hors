@@ -21,6 +21,7 @@ export const headerData = {
   newRouteLink: 'Dodaj trasę',
   searchRoutesLink: 'Szukaj tras',
   yourListLink: 'Moje trasy',
+  statusListLink: 'Lista oczekujących',
 };
 
 export const loginPageData = {

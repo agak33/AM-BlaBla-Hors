@@ -43,7 +43,7 @@ export function UserLandingPage() {
           </Link>
         </div>
       </div>
-      {!isLoading && <StatsSection stats={{ organized }} />}
+      {/* {!isLoading && <StatsSection stats={{ organized }} />} */}
     </Container>
   );
 }

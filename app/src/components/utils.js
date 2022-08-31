@@ -126,3 +126,30 @@ export function convertCurrencies(from, amount, to) {
   const fx = require('money');
   console.log(fx.convert(12.99, { from: 'GBP', to: 'HKD' }));
 }
+
+export async function signUpForRoute(routeUUID, animalsNum, peopleNum) {
+  let statusCode = 400;
+  await axios
+    .post(
+      `${process.env.REACT_APP_API_URL}/route/passenger/`,
+      {
+        route: routeUUID,
+        animals_num: animalsNum,
+        people_num: peopleNum,
+      },
+      {
+        headers: {
+          Authorization: `Token ${JSON.parse(
+            window.localStorage.getItem(process.env.REACT_APP_TOKEN_NAME)
+          )}`,
+        },
+      }
+    )
+    .then((response) => {
+      statusCode = response.status;
+    })
+    .catch((err) => {
+      statusCode = err.response.status;
+    });
+  return statusCode;
+}

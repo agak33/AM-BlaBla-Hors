@@ -2,16 +2,14 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-export function useRoutes(searchParams, isUserList) {
-  const [routes, setRoutes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+export function useStatuses() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [statuses, setStatuses] = useState([]);
 
   useEffect(() => {
     async function fetch() {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/route/${
-          isUserList ? '' : 'filtered_offers/'
-        }${isUserList ? '' : searchParams}`,
+        `${process.env.REACT_APP_API_URL}/route/passenger/`,
         {
           headers: {
             Authorization: `Token ${JSON.parse(
@@ -20,13 +18,12 @@ export function useRoutes(searchParams, isUserList) {
           },
         }
       );
-      if (response.status === 200) {
-        setRoutes(response.data);
-      }
+
+      setStatuses(response.data);
       setIsLoading(false);
     }
     fetch();
-  }, [searchParams]);
+  }, []);
 
-  return { isLoading, routes };
+  return { isLoading, statuses };
 }
