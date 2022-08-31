@@ -14,13 +14,3 @@ npm install
 chmod +x startapp.sh
 ./startapp.sh
 ```
-
-### On Windows:
-
-```
-cd ./app
-npm install
-set REACT_APP_API_URL="http://localhost:8000"
-set REACT_APP_TOKEN_NAME="__token"
-npm start
-```
